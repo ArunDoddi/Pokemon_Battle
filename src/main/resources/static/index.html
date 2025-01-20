@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon Battle</title>
+    <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="app.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- For API Calls -->
+</head>
+
+<body>
+    <div id="app" class="section">
+        <h1 class="title has-text-centered">Pokemon Battle</h1>
+
+        <!-- Dropdowns for Selecting Pokemon -->
+        <div class="columns is-centered">
+            <div class="column is-4">
+                <div class="field">
+                    <label class="label">Select Pokemon A</label>
+                    <div class="control">
+                        <div class="select is-fullwidth">
+                            <select v-model="pokemonA">
+                                <option v-for="pokemon in pokemonList" :value="pokemon.name" :key="pokemon.name">
+                                    {{ pokemon.name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="pokemonA" class="has-text-centered mt-2">
+                    <img :src="'https://img.pokemondb.net/sprites/home/normal/' + pokemonA.toLowerCase() + '.png'"
+                        alt="pokemon" />
+                </div>
+            </div>
+            <div class="column is-1 has-text-centered">
+                <h2 class="is-size-2">V/S</h2>
+            </div>
+            <div class="column is-4">
+                <div class="field">
+                    <label class="label">Select Pokemon B</label>
+                    <div class="control">
+                        <div class="select is-fullwidth">
+                            <select v-model="pokemonB">
+                                <option v-for="pokemon in pokemonList" :value="pokemon.name" :key="pokemon.name">
+                                    {{ pokemon.name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="pokemonB" class="has-text-centered mt-2">
+                    <img :src="'https://img.pokemondb.net/sprites/home/normal/' + pokemonB.toLowerCase() + '.png'"
+                        alt="pokemon" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Button to Perform the Battle -->
+        <div class="has-text-centered">
+            <button class="button is-primary" @click="battle" :disabled="!pokemonA || !pokemonB">Battle!</button>
+        </div>
+
+        <!-- Results Section -->
+        <div v-if="battleResult" class="notification is-success mt-5 ">
+            <p class="is-size-3 has-text-centered">{{ battleResult.Winner }} Wins!</p>
+            <p class="has-text-centered">Remaining Hit Points: {{ battleResult.Remaining_HitPoints }}</p>
+        </div>
+
+        <div v-if="battleResult" class="has-text-centered mt-2">
+            <img class="sprite"
+                :src="'https://img.pokemondb.net/sprites/home/normal/' + (battleResult.Winner ? battleResult.Winner.toLowerCase() : '') + '.png'"
+                alt="pokemon" />
+        </div>
+
+        <!-- Loading Spinner -->
+        <div v-if="loading" class="has-text-centered mt-5">
+            <button class="button is-loading is-large is-primary">Loading</button>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
